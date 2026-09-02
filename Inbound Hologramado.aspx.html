@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#000">
+<title>SE Inbound | Verificación de Hologramas</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+:root{--g:#00C853;--gd:#00a844;--black:#1f2937;--bg:#f4f6f8;--border:#dcdfe4;--muted:#667085;--yellow:#f5b700;--red:#d92d20}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Segoe UI,Arial,sans-serif;color:#151515}
+header{background:var(--g);color:#fff;border-bottom:none;padding:20px 30px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.header{max-width:1050px;margin:auto;display:flex;align-items:center;justify-content:flex-start;gap:22px}
+.brand{display:flex;align-items:center;gap:16px}.mark{font-size:44px;font-weight:900;color:#fff}.brand b{font-size:26px;line-height:1.2;font-weight:800;letter-spacing:1px}.brand small{color:#eafff0;font-size:19px;font-weight:600}.life{display:none}
+main{max-width:1050px;margin:auto;padding:16px}.tabs{display:flex;gap:8px;margin-bottom:18px}.tab{border:0;background:transparent;border-radius:7px;padding:10px 16px;font-weight:800;color:#333}.tab.active{background:var(--black);color:#fff}
+.card{background:#fff;border:none;border-radius:14px;padding:18px;box-shadow:0 3px 12px rgba(0,0,0,.08);margin-bottom:14px}
+.eyebrow{font-size:11px;color:var(--gd);font-weight:900;letter-spacing:1px}h1{font-size:28px;margin:3px 0}p{color:var(--muted);margin:4px 0 15px}
+.scanner-head{display:flex;justify-content:space-between;align-items:center;background:var(--black);color:#fff;padding:15px 18px;border-left:5px solid var(--g);margin:-18px -18px 15px -18px;border-radius:14px 14px 0 0}
+.scanner-head h2{font-size:16px;margin:0;color:#fff}
+.status{font-size:12px;color:var(--muted)}
+.scanner-head .status{color:#c9d1d9}
+.dot{width:11px;height:11px;background:#aaa;border-radius:50%}.dot.on{background:var(--g);box-shadow:0 0 0 5px rgba(0,200,83,.2)}
+#reader{background:#111;border-radius:9px;overflow:hidden;min-height:230px}.actions{display:flex;gap:8px;margin-top:10px}.btn{border:0;border-radius:7px;padding:12px 15px;font-weight:800;cursor:pointer}.primary{background:var(--g);color:#000}.secondary{background:#fff;border:1px solid #222}.help{background:#f7f8f9;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:var(--muted)}
+label{font-weight:800;display:block;background:var(--black);color:#fff;padding:14px 18px;margin:-18px -18px 16px -18px;border-left:5px solid var(--g);border-radius:14px 14px 0 0;font-size:15px}.search{display:flex}.search input{min-width:0;flex:1;border:1px solid var(--border);padding:13px;border-radius:7px 0 0 7px;font-size:16px}.search button{border-radius:0 7px 7px 0}
+.result{overflow:hidden}.resultbar{padding:18px;border-left:6px solid var(--g)}.resultbar.y{border-left-color:var(--yellow)}.resultbar.r{border-left-color:var(--red)}.resultbar strong{font-size:19px}.ref{font:12px monospace;color:var(--muted);margin-top:4px}
+.resultgrid{display:grid;grid-template-columns:1fr 1.2fr;gap:15px;padding:15px}.photo{min-height:220px;border-radius:9px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f8f8f8,#e9ecef);overflow:hidden}.device{width:120px;height:165px;border-radius:8px;background:#333;box-shadow:0 8px 20px #0003;position:relative}.device:before{content:"";position:absolute;left:13px;right:13px;top:12px;height:45px;background:#eee;border-radius:3px}.device:after{content:"";position:absolute;left:22px;right:22px;bottom:22px;height:28px;border:2px solid var(--g);border-radius:4px}.contactor{width:145px;height:155px;background:#34383c;border-radius:9px;position:relative;box-shadow:0 8px 20px #0003}.contactor:before{content:"";position:absolute;left:25px;right:25px;top:23px;height:82px;background:#e9e9e9;border-radius:4px}.contactor:after{content:"";position:absolute;left:48px;right:48px;bottom:18px;height:25px;background:#222;border-radius:3px}
+.info{background:#f7f8f9;border-radius:9px;padding:14px}.info h3{font-size:14px;margin:0 0 8px}.steps{padding-left:20px;margin:0}.steps li{margin-bottom:7px}.badge{display:inline-block;padding:5px 8px;border-radius:5px;font-size:11px;font-weight:900;margin-top:8px}.yes{background:#fff1c7;color:#745600}.no{background:#e7f7ea;color:#146c2e}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:13px}.product{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer}.product:hover{box-shadow:0 7px 20px #00000012}.mini-photo{height:145px;display:flex;align-items:center;justify-content:center;background:#f6f7f8;overflow:hidden}.product-body{padding:13px}.product h3{font-size:15px;margin:0 0 5px}.code{font:12px monospace;color:var(--muted)}.hidden{display:none}.note{font-size:11px;color:var(--muted);margin-top:10px}
+footer{max-width:1050px;margin:auto;padding:10px 18px 25px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between}
+@media(max-width:650px){.life{display:none}h1{font-size:24px}.resultgrid{grid-template-columns:1fr}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<header><div class="header">
+  <div class="brand"><img src="Schneider-Electric-Emblem.png" alt="Schneider Electric" style="height:70px;width:auto;object-fit:contain"><div><b>INBOUND</b><br><small>Verificación de Hologramado</small></div></div>
+</div></header>
+
+<main>
+<div class="tabs">
+ <button class="tab active" data-view="scan">Escanear</button>
+ <button class="tab" data-view="catalog">Catálogo</button>
+</div>
+
+<section id="scan">
+ <span class="eyebrow">MÓDULO INBOUND</span><h1>Verificación de producto</h1>
+ <p>Escanee una referencia para consultar el estado de hologramado.</p>
+
+ <div class="card">
+  <div class="scanner-head"><div><h2>Escáner de código</h2><div id="cameraStatus" class="status">Cámara detenida</div></div><span id="dot" class="dot"></span></div>
+  <div id="reader"></div>
+  <div class="actions"><button class="btn primary" id="start">Iniciar cámara</button><button class="btn secondary" id="stop">Detener</button></div>
+  <div class="help"><b>Para probar la cámara:</b> esta página debe abrirse en HTTPS (o localhost). Si se abre como archivo <code>file://</code>, el navegador puede bloquear la cámara.</div>
+ </div>
+
+ <div class="card">
+  <label for="manual">Búsqueda manual</label>
+  <div class="search"><input id="manual" placeholder="Código, referencia o modelo"><button class="btn primary" id="search">Verificar</button></div>
+  <div class="note">Los códigos de barras de esta demo son ficticios.</div>
+ </div>
+
+ <div id="result" class="card result hidden"></div>
+</section>
+
+<section id="catalog" class="hidden">
+ <span class="eyebrow">DEMO CON PRODUCTOS REALES</span><h1>Catálogo Inbound</h1>
+ <p>Catálogo visual DEMO con productos de referencia de Schneider Electric. <b>Los códigos DEMO y las reglas de hologramado son ficticios.</b></p>
+ <div class="card"><input id="filter" style="width:100%;padding:13px;border:1px solid var(--border);border-radius:7px;font-size:16px" placeholder="🔎 Buscar código, referencia o modelo..."></div>
+ <div id="grid" class="grid"></div>
+</section>
+</main>
+<footer><span>Schneider Electric · Demo académica/prototipo</span><span>Datos de hologramado: FICTICIOS</span></footer>
+
+<script>
+const DB={
+ "DEMO-001":{imagen:"https://download.schneider-electric.com/files?p_Doc_Ref=A9F84203_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png",
+  producto:"Interruptor automático Acti9 iC60",modelo:"Acti9 iC60",codigo:"DEMO-001",tipo:"breaker",necesita:true,
+  refReal:"Acti9 iC60",fuente:"Producto de referencia: Schneider Electric Perú",
+  ubicacion:"Zona lateral derecha (REGLA FICTICIA PARA ESTA DEMO).",
+  pasos:["Verificar visualmente la referencia.","Tomar un holograma nuevo.","Colocarlo en la zona indicada.","Confirmar que quede completamente adherido."]
+ },
+ "DEMO-002":{imagen:"https://download.schneider-electric.com/files?p_Doc_Ref=LC1D09X7_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png",
+  producto:"Contactor TeSys D 3P 9A",modelo:"LC1D09X7",codigo:"DEMO-002",tipo:"contactor",necesita:false,
+  refReal:"LC1D09X7",fuente:"Producto de referencia: Schneider Electric",
+  ubicacion:"No aplica.",pasos:[]
+ },
+ "DEMO-003":{imagen:"https://download.schneider-electric.com/files?p_Doc_Ref=LC1D25Q7_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png",
+  producto:"Contactor TeSys D 3P 25A",modelo:"LC1D25Q7",codigo:"DEMO-003",tipo:"contactor",necesita:true,
+  refReal:"LC1D25Q7",fuente:"Producto de referencia: Schneider Electric Perú",
+  ubicacion:"Zona frontal inferior (REGLA FICTICIA PARA ESTA DEMO).",
+  pasos:["Confirmar referencia y modelo.","Tomar un holograma nuevo.","Colocarlo en la ubicación señalada.","Realizar inspección visual final."]
+ },
+ "DEMO-004":{imagen:"https://download.schneider-electric.com/files?p_Doc_Ref=LC1D18M7_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png",
+  producto:"Contactor TeSys D 3P 18A",modelo:"LC1D18M7",codigo:"DEMO-004",tipo:"contactor",necesita:false,
+  refReal:"LC1D18M7",fuente:"Producto de referencia: Schneider Electric Perú",
+  ubicacion:"No aplica.",pasos:[]
+ },
+ "DEMO-005":{imagen:"https://download.schneider-electric.com/files?p_Doc_Ref=A9F74220_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png",
+  producto:"Llave térmica Acti9 iC60N 2P 20A curva C",modelo:"A9F74220",codigo:"DEMO-005",tipo:"breaker",necesita:true,
+  refReal:"A9F74220",fuente:"Producto de referencia: Schneider Electric Perú",
+  ubicacion:"Zona superior derecha (REGLA FICTICIA PARA ESTA DEMO).",
+  pasos:["Verificar visualmente la referencia.","Tomar un holograma nuevo.","Colocarlo en la zona indicada.","Confirmar que quede completamente adherido."]
+ },
+ "DEMO-006":{imagen:"https://download.schneider-electric.com/files?p_Doc_Ref=A9F74332_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png",
+  producto:"Llave térmica Acti9 iC60N 3P 32A curva C",modelo:"A9F74332",codigo:"DEMO-006",tipo:"breaker",necesita:true,
+  refReal:"A9F74332",fuente:"Producto de referencia: Schneider Electric Perú",
+  ubicacion:"Zona lateral izquierda (REGLA FICTICIA PARA ESTA DEMO).",
+  pasos:["Confirmar referencia y modelo.","Tomar un holograma nuevo.","Colocarlo en la ubicación señalada.","Realizar inspección visual final."]
+ },
+ "DEMO-007":{imagen:"https://download.schneider-electric.com/files?p_Doc_Ref=A9R71225_Image&p_File_Type=rendition_369_jpg&default_image=DefaultProductImage.png",
+  producto:"Interruptor diferencial Acti9 iID 2P 25A 30mA",modelo:"A9R71225",codigo:"DEMO-007",tipo:"breaker",necesita:false,
+  refReal:"A9R71225",fuente:"Producto de referencia: Schneider Electric Perú",
+  ubicacion:"No aplica.",pasos:[]
+ }
+};
+
+let scanner=null,active=false,last="",lastTime=0;
+
+function art(type, imagen){
+ if(imagen) return `<img src="${esc(imagen)}" alt="Producto Schneider Electric" style="width:100%;height:100%;object-fit:contain;padding:10px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div style="display:none">${type==="breaker"?'<div class="device"></div>':'<div class="contactor"></div>'}</div>`;
+ return type==="breaker" ? '<div class="device"></div>' : '<div class="contactor"></div>';
+}
+function show(code){
+ code=code.trim().toUpperCase(); const p=DB[code],r=document.getElementById("result");
+ if(!p){r.innerHTML=`<div class="resultbar r"><strong>REFERENCIA NO REGISTRADA</strong><div class="ref">CÓDIGO: ${esc(code)}</div></div><div class="resultgrid"><div class="info"><h3>Acción</h3><ol class="steps"><li>No colocar holograma.</li><li>Seguir el procedimiento interno para referencias no registradas.</li><li>Informar al supervisor.</li></ol></div></div>`;r.classList.remove("hidden");requestAnimationFrame(()=>requestAnimationFrame(()=>r.scrollIntoView({behavior:"smooth",block:"start"})));return}
+ const officialLink = p.refReal ? `<a href="https://www.se.com/pe/es/" target="_blank" rel="noopener" style="color:#147d2d;font-weight:700">Ver sitio oficial Schneider Electric ↗</a>` : ""; const steps=p.necesita?`<div class="info"><h3>Ubicación</h3><p>${esc(p.ubicacion)}</p><h3>Cómo realizarlo</h3><ol class="steps">${p.pasos.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>`:`<div class="info"><h3>✓ Acción</h3><p>Esta referencia <b>NO requiere holograma</b> en esta demo.</p></div>`;
+ r.innerHTML=`<div class="resultbar ${p.necesita?"y":""}"><strong>${p.necesita?"REQUIERE HOLOGRAMA":"NO REQUIERE HOLOGRAMA"}</strong><div style="font-weight:800;margin-top:5px">${esc(p.producto)}</div><div class="ref">Código demo: ${esc(p.codigo)} · Modelo: ${esc(p.modelo)}</div></div><div class="resultgrid"><div class="photo">${art(p.tipo,p.imagen)}</div><div>${steps}${p.necesita?'<div class="info" style="margin-top:10px"><h3>Referencia visual</h3><p>En la versión operativa aquí irá una fotografía real del producto con una marca/flecha sobre la zona exacta del holograma.</p></div>':""}<div class="note">${esc(p.fuente)}. El hologramado mostrado es ficticio.<br>${officialLink}</div></div></div>`;
+ r.classList.remove("hidden");requestAnimationFrame(()=>requestAnimationFrame(()=>r.scrollIntoView({behavior:"smooth",block:"start"})));
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function render(filter=""){
+ const grid=document.getElementById("grid"),q=filter.toLowerCase();grid.innerHTML="";
+ Object.values(DB).filter(p=>`${p.codigo} ${p.producto} ${p.modelo}`.toLowerCase().includes(q)).forEach(p=>{
+  const d=document.createElement("div");d.className="product";d.innerHTML=`<div class="mini-photo">${art(p.tipo,p.imagen)}</div><div class="product-body"><h3>${esc(p.producto)}</h3><div class="code">${esc(p.codigo)}</div><div>${esc(p.modelo)}</div><span class="badge ${p.necesita?"yes":"no"}">${p.necesita?"REQUIERE HOLOGRAMA":"NO REQUIERE"}</span></div>`;
+  d.onclick=()=>{document.querySelector('[data-view="scan"]').click();show(p.codigo)};grid.appendChild(d);
+ });
+}
+async function startCamera(){
+ if(active)return;
+ try{
+  scanner=new Html5Qrcode("reader");const cams=await Html5Qrcode.getCameras();if(!cams.length)throw Error("Sin cámara");
+  let cam=cams.find(c=>/back|rear|environment|trasera/i.test(c.label))||cams[0];
+  await scanner.start(cam.id,{fps:10,qrbox:{width:310,height:150}},txt=>{const now=Date.now();if(txt===last&&now-lastTime<3000)return;last=txt;lastTime=now;show(txt)},()=>{});
+  active=true;document.getElementById("cameraStatus").textContent="Cámara activa — apunte al código";document.getElementById("dot").classList.add("on");
+ }catch(e){document.getElementById("cameraStatus").textContent="No se pudo iniciar la cámara";alert("La cámara necesita permiso y una página HTTPS (o localhost).")}
+}
+async function stopCamera(){if(!scanner||!active)return;try{await scanner.stop();await scanner.clear()}catch(e){}active=false;document.getElementById("cameraStatus").textContent="Cámara detenida";document.getElementById("dot").classList.remove("on")}
+document.getElementById("start").onclick=startCamera;document.getElementById("stop").onclick=stopCamera;
+document.getElementById("search").onclick=()=>show(document.getElementById("manual").value);
+document.getElementById("manual").onkeydown=e=>{if(e.key==="Enter")show(e.target.value)};
+document.getElementById("filter").oninput=e=>render(e.target.value);
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));t.classList.add("active");document.getElementById("scan").classList.toggle("hidden",t.dataset.view!=="scan");document.getElementById("catalog").classList.toggle("hidden",t.dataset.view!=="catalog")});
+render();
+</script>
+</body>
+</html>
